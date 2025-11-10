@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Button } from "@/components/ui/button"
 
 export default function Home() {
   return (
@@ -58,6 +59,12 @@ export default function Home() {
           >
             Documentation
           </a>
+        </div>
+        <div>
+          <h1 className="text-4xl font-bold text-purple-400">
+            Next.js + Tailwind CSS + shadcn/ui
+          </h1>
+          <Button className="mt-4" variant="outline">Hello shadcn/ui Button</Button>
         </div>
       </main>
     </div>
