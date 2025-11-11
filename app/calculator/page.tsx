@@ -1,0 +1,794 @@
+"use client";
+
+import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, TrendingUp, TrendingDown, Minus, Info, LucideIcon, Camera, Check } from "lucide-react";
+import Link from "next/link";
+import html2canvas from "html2canvas";
+import { motion } from "framer-motion";
+
+interface FormData {
+  // 经济回报
+  monthlySalary: number;
+  annualBonus: number;
+  benefits: number;
+  
+  // 时间成本
+  weeklyHours: number;
+  commuteHours: number;
+  overtimeFrequency: number; // 1-5分
+  
+  // 成长价值
+  skillGrowth: number; // 1-5分
+  promotionChance: number; // 1-5分
+  industryProspect: number; // 1-5分
+  
+  // 工作体验
+  workPressure: number; // 1-5分，越高压力越大
+  teamAtmosphere: number; // 1-5分
+  workInterest: number; // 1-5分
+  
+  // 生活平衡
+  workFlexibility: number; // 1-5分
+  vacationBenefit: number; // 1-5分
+  workLifeBalance: number; // 1-5分
+}
+
+interface CalculationResult {
+  totalScore: number;
+  level: string;
+  color: string;
+  icon: LucideIcon;
+  humorLabel: string;
+  humorDescription: string;
+  dimensions: {
+    economic: { score: number; percentage: number };
+    time: { score: number; percentage: number };
+    growth: { score: number; percentage: number };
+    experience: { score: number; percentage: number };
+    balance: { score: number; percentage: number };
+  };
+  hourlyValue: number;
+  recommendations: string[];
+}
+
+export default function CalculatorPage() {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState<FormData>({
+    monthlySalary: 0,
+    annualBonus: 0,
+    benefits: 0,
+    weeklyHours: 40,
+    commuteHours: 0,
+    overtimeFrequency: 3,
+    skillGrowth: 3,
+    promotionChance: 3,
+    industryProspect: 3,
+    workPressure: 3,
+    teamAtmosphere: 3,
+    workInterest: 3,
+    workFlexibility: 3,
+    vacationBenefit: 3,
+    workLifeBalance: 3,
+  });
+  const [result, setResult] = useState<CalculationResult | null>(null);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [captureSuccess, setCaptureSuccess] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
+
+  const updateFormData = (field: keyof FormData, value: number) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const calculateScore = (): CalculationResult => { 
+    // 1. 经济回报维度 (30%)
+    const totalAnnualIncome = formData.monthlySalary * 12 + formData.annualBonus + formData.benefits;
+    const totalWorkHours = formData.weeklyHours * 52 + formData.commuteHours * 52 * 5;
+    const hourlyRate = totalAnnualIncome / totalWorkHours;
+    
+    // 经济得分基于小时工资和加班情况
+    const economicBase = Math.min((hourlyRate / 100) * 100, 100);
+    const overtimePenalty = (5 - formData.overtimeFrequency) * 2;
+    const economicScore = (economicBase * 0.8 + overtimePenalty * 0.2) * 0.3;
+
+    // 2. 时间成本维度 (25%)
+    const weeklyScore = Math.max(0, 100 - (formData.weeklyHours - 40) * 2);
+    const commuteScore = Math.max(0, 100 - formData.commuteHours * 10);
+    const overtimeScore = ((5 - formData.overtimeFrequency + 1) / 5) * 100;
+    const timeScore = (weeklyScore * 0.4 + commuteScore * 0.3 + overtimeScore * 0.3) * 0.25;
+
+    // 3. 成长价值维度 (20%)
+    const growthScore = (
+      (formData.skillGrowth / 5) * 40 +
+      (formData.promotionChance / 5) * 35 +
+      (formData.industryProspect / 5) * 25
+    ) * 0.2;
+
+    // 4. 工作体验维度 (15%)
+    const experienceScore = (
+      ((5 - formData.workPressure + 1) / 5) * 35 +
+      (formData.teamAtmosphere / 5) * 35 +
+      (formData.workInterest / 5) * 30
+    ) * 0.15;
+
+    // 5. 生活平衡维度 (10%)
+    const balanceScore = (
+      (formData.workFlexibility / 5) * 33 +
+      (formData.vacationBenefit / 5) * 33 +
+      (formData.workLifeBalance / 5) * 34
+    ) * 0.1;
+
+    const totalScore = economicScore + timeScore + growthScore + experienceScore + balanceScore;
+
+    // 生成建议
+    const recommendations: string[] = [];
+    
+    if (economicScore < 20) {
+      recommendations.push("经济回报偏低，建议考虑薪资谈判或寻找更好的机会");
+    }
+    if (timeScore < 15) {
+      recommendations.push("时间成本过高，建议优化工作时间或减少通勤时间");
+    }
+    if (growthScore < 12) {
+      recommendations.push("成长空间有限，建议主动寻求学习机会或考虑转型");
+    }
+    if (experienceScore < 9) {
+      recommendations.push("工作体验不佳，建议与管理层沟通或考虑换环境");
+    }
+    if (balanceScore < 6) {
+      recommendations.push("工作生活失衡，建议设定明确边界或寻求更灵活的工作");
+    }
+
+    if (totalScore >= 80) {
+      recommendations.push("整体性价比优秀，继续保持并寻求更高层次发展");
+    } else if (totalScore >= 60) {
+      recommendations.push("整体表现良好，可针对薄弱维度进行优化");
+    } else if (totalScore >= 40) {
+      recommendations.push("性价比中等，建议制定改进计划，考虑是否需要做出改变");
+    } else {
+      recommendations.push("性价比较低，强烈建议重新评估职业选择，寻求更好的机会");
+    }
+
+    let level = "";
+    let color = "";
+    let icon = Minus;
+    let humorLabel = "";
+    let humorDescription = "";
+    
+    if (totalScore >= 90) {
+      level = "优秀";
+      color = "text-green-600";
+      icon = TrendingUp;
+      humorLabel = "🎉 人生赢家";
+      humorDescription = "这就是传说中的躺赢模式";
+    } else if (totalScore >= 80) {
+      level = "优秀";
+      color = "text-green-600";
+      icon = TrendingUp;
+      humorLabel = "😎 职场精英";
+      humorDescription = "别人996，你在享受生活";
+    } else if (totalScore >= 70) {
+      level = "良好";
+      color = "text-blue-600";
+      icon = TrendingUp;
+      humorLabel = "💼 白领一族";
+      humorDescription = "体面工作，稳中向好";
+    } else if (totalScore >= 60) {
+      level = "良好";
+      color = "text-blue-600";
+      icon = TrendingUp;
+      humorLabel = "🏃 奋斗青年";
+      humorDescription = "有点累但还算值得";
+    } else if (totalScore >= 50) {
+      level = "中等";
+      color = "text-yellow-600";
+      icon = Minus;
+      humorLabel = "😅 打工人";
+      humorDescription = "标准社畜，勉强糊口";
+    } else if (totalScore >= 40) {
+      level = "中等";
+      color = "text-yellow-600";
+      icon = Minus;
+      humorLabel = "😓 工具人";
+      humorDescription = "付出与回报不太匹配";
+    } else if (totalScore >= 30) {
+      level = "待改善";
+      color = "text-red-600";
+      icon = TrendingDown;
+      humorLabel = "🐴 现代牛马";
+      humorDescription = "建议考虑跳槽改命";
+    } else {
+      level = "待改善";
+      color = "text-red-600";
+      icon = TrendingDown;
+      humorLabel = "💀 血汗工厂";
+      humorDescription = "快跑！留得青山在";
+    }
+
+    return {
+      totalScore: Math.round(totalScore * 10) / 10,
+      level,
+      color,
+      icon,
+      humorLabel,
+      humorDescription,
+      dimensions: {
+        economic: { score: Math.round(economicScore * 10) / 10, percentage: 30 },
+        time: { score: Math.round(timeScore * 10) / 10, percentage: 25 },
+        growth: { score: Math.round(growthScore * 10) / 10, percentage: 20 },
+        experience: { score: Math.round(experienceScore * 10) / 10, percentage: 15 },
+        balance: { score: Math.round(balanceScore * 10) / 10, percentage: 10 },
+      },
+      hourlyValue: Math.round(hourlyRate * 10) / 10,
+      recommendations,
+    };
+  };
+
+  const handleSubmit = () => {
+    const calculationResult = calculateScore();
+    setResult(calculationResult);
+  };
+
+  const handleCapture = async () => {
+    if (!reportRef.current) return;
+
+    setIsCapturing(true);
+    setCaptureSuccess(false);
+
+    try {
+      // 等待动画效果
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      const canvas = await html2canvas(reportRef.current, {
+        backgroundColor: '#ffffff',
+        scale: 2, // 提高清晰度
+        logging: false,
+        useCORS: true,
+      });
+
+      // 转换为 blob
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          try {
+            // 复制到剪贴板
+            await navigator.clipboard.write([
+              new ClipboardItem({
+                'image/png': blob
+              })
+            ]);
+            
+            setCaptureSuccess(true);
+            setTimeout(() => setCaptureSuccess(false), 3000);
+          } catch (err) {
+            console.error('复制到剪贴板失败:', err);
+            // 降级方案：下载图片
+            const url = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = `工作性价比报告-${new Date().getTime()}.png`;
+            link.href = url;
+            link.click();
+            
+            setCaptureSuccess(true);
+            setTimeout(() => setCaptureSuccess(false), 3000);
+          }
+        }
+        setIsCapturing(false);
+      }, 'image/png');
+    } catch (error) {
+      console.error('截图失败:', error);
+      setIsCapturing(false);
+    }
+  };
+
+  const renderStep1 = () => (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">第一步：经济回报</h2>
+      <p className="text-muted-foreground">请填写你的收入相关信息</p>
+      
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">月薪收入（元）</label>
+          <input
+            type="number"
+            value={formData.monthlySalary || ""}
+            onChange={(e) => updateFormData("monthlySalary", Number(e.target.value))}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"
+            placeholder="如：15000"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">年终奖（元）</label>
+          <input
+            type="number"
+            value={formData.annualBonus || ""}
+            onChange={(e) => updateFormData("annualBonus", Number(e.target.value))}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"
+            placeholder="如：30000"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">其他福利年价值（元）</label>
+          <input
+            type="number"
+            value={formData.benefits || ""}
+            onChange={(e) => updateFormData("benefits", Number(e.target.value))}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"
+            placeholder="如：5000（五险一金、补贴等折算年价值）"
+          />
+          <p className="text-xs text-muted-foreground mt-1">包括五险一金、交通补贴、餐补等</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderStep2 = () => (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">第二步：时间成本</h2>
+      <p className="text-muted-foreground">评估你在工作上投入的时间</p>
+      
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">周工作时长（小时）</label>
+          <input
+            type="number"
+            value={formData.weeklyHours || ""}
+            onChange={(e) => updateFormData("weeklyHours", Number(e.target.value))}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"
+            placeholder="如：40"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">每日通勤时长（小时）</label>
+          <input
+            type="number"
+            step="0.5"
+            value={formData.commuteHours || ""}
+            onChange={(e) => updateFormData("commuteHours", Number(e.target.value))}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"
+            placeholder="如：2（往返总时长）"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">加班频率（1-5分，5分为经常加班）</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={formData.overtimeFrequency}
+            onChange={(e) => updateFormData("overtimeFrequency", Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>几乎不加班</span>
+            <span className="font-medium text-primary">{formData.overtimeFrequency}</span>
+            <span>经常加班</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderStep3 = () => (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">第三步：成长价值</h2>
+      <p className="text-muted-foreground">评估这份工作对你职业发展的价值</p>
+      
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">技能提升机会（1-5分）</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={formData.skillGrowth}
+            onChange={(e) => updateFormData("skillGrowth", Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>很少学习</span>
+            <span className="font-medium text-primary">{formData.skillGrowth}</span>
+            <span>持续成长</span>
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">晋升空间（1-5分）</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={formData.promotionChance}
+            onChange={(e) => updateFormData("promotionChance", Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>很难晋升</span>
+            <span className="font-medium text-primary">{formData.promotionChance}</span>
+            <span>机会很多</span>
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">行业前景（1-5分）</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={formData.industryProspect}
+            onChange={(e) => updateFormData("industryProspect", Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>前景堪忧</span>
+            <span className="font-medium text-primary">{formData.industryProspect}</span>
+            <span>前景光明</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderStep4 = () => (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">第四步：工作体验</h2>
+      <p className="text-muted-foreground">评估你的工作感受和环境</p>
+      
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">工作压力（1-5分，5分为压力很大）</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={formData.workPressure}
+            onChange={(e) => updateFormData("workPressure", Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>压力很小</span>
+            <span className="font-medium text-primary">{formData.workPressure}</span>
+            <span>压力很大</span>
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">团队氛围（1-5分）</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={formData.teamAtmosphere}
+            onChange={(e) => updateFormData("teamAtmosphere", Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>氛围较差</span>
+            <span className="font-medium text-primary">{formData.teamAtmosphere}</span>
+            <span>氛围很好</span>
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">工作兴趣度（1-5分）</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={formData.workInterest}
+            onChange={(e) => updateFormData("workInterest", Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>不感兴趣</span>
+            <span className="font-medium text-primary">{formData.workInterest}</span>
+            <span>非常喜欢</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderStep5 = () => (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">第五步：生活平衡</h2>
+      <p className="text-muted-foreground">评估工作与生活的平衡状况</p>
+      
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">工作灵活度（1-5分）</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={formData.workFlexibility}
+            onChange={(e) => updateFormData("workFlexibility", Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>很不灵活</span>
+            <span className="font-medium text-primary">{formData.workFlexibility}</span>
+            <span>非常灵活</span>
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">假期福利（1-5分）</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={formData.vacationBenefit}
+            onChange={(e) => updateFormData("vacationBenefit", Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>假期很少</span>
+            <span className="font-medium text-primary">{formData.vacationBenefit}</span>
+            <span>假期充足</span>
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">工作生活平衡（1-5分）</label>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={formData.workLifeBalance}
+            onChange={(e) => updateFormData("workLifeBalance", Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>严重失衡</span>
+            <span className="font-medium text-primary">{formData.workLifeBalance}</span>
+            <span>平衡良好</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderResult = () => {
+    if (!result) return null;
+    
+    const Icon = result.icon;
+    
+    return (
+      <div className="space-y-8">
+        {/* 截图按钮 */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex justify-end"
+        >
+          <Button
+            onClick={handleCapture}
+            disabled={isCapturing}
+            variant="outline"
+            className="gap-2"
+          >
+            {captureSuccess ? (
+              <>
+                <Check className="h-4 w-4 text-green-600" />
+                已保存到剪贴板
+              </>
+            ) : (
+              <>
+                <Camera className="h-4 w-4" />
+                {isCapturing ? '截图中...' : '保存为图片'}
+              </>
+            )}
+          </Button>
+        </motion.div>
+
+        {/* 报告内容区域 */}
+        <div ref={reportRef} className="space-y-8 bg-background p-8 rounded-xl">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
+        >
+          <h2 className="text-3xl font-bold mb-4">你的工作性价比评估报告</h2>
+          <div className="inline-flex items-center gap-3 bg-card border rounded-xl p-6">
+            <Icon className={`h-12 w-12 ${result.color}`} />
+            <div className="text-left">
+              <div className="text-sm text-muted-foreground">综合得分</div>
+              <div className="text-4xl font-bold">{result.totalScore}</div>
+              <div className={`text-lg font-semibold ${result.color}`}>{result.level}</div>
+            </div>
+          </div>
+          
+          {/* 幽默评价 */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 border border-purple-200 dark:border-purple-800 rounded-xl p-6"
+          >
+            <div className="text-2xl font-bold mb-2">{result.humorLabel}</div>
+            <div className="text-muted-foreground">{result.humorDescription}</div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="bg-card border rounded-xl p-6"
+        >
+          <h3 className="text-xl font-bold mb-4">各维度得分</h3>
+          <div className="space-y-4">
+            {[
+              { key: "economic", label: "经济回报", icon: "💰" },
+              { key: "time", label: "时间成本", icon: "⏰" },
+              { key: "growth", label: "成长价值", icon: "📈" },
+              { key: "experience", label: "工作体验", icon: "😊" },
+              { key: "balance", label: "生活平衡", icon: "⚖️" },
+            ].map(({ key, label, icon }) => {
+              const dim = result.dimensions[key as keyof typeof result.dimensions];
+              const maxScore = dim.percentage;
+              const percentage = (dim.score / maxScore) * 100;
+              
+              return (
+                <div key={key}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">{icon} {label}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {dim.score.toFixed(1)} / {maxScore}
+                    </span>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-3">
+                    <div
+                      className="bg-primary rounded-full h-3 transition-all"
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
+                </div>
+              );  
+            })}
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="bg-card border rounded-xl p-6"
+        >
+          <h3 className="text-xl font-bold mb-4">关键指标</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-muted/50 rounded-lg p-4">
+              <div className="text-sm text-muted-foreground mb-1">时薪价值</div>
+              <div className="text-2xl font-bold">¥{result.hourlyValue.toFixed(2)}</div>
+            </div>
+            <div className="bg-muted/50 rounded-lg p-4">
+              <div className="text-sm text-muted-foreground mb-1">年工作总时长</div>
+              <div className="text-2xl font-bold">
+                {((formData.weeklyHours + formData.commuteHours * 5) * 52).toFixed(0)}小时
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl p-6"
+        >
+          <div className="flex items-start gap-3">
+            <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <h3 className="text-lg font-bold mb-3 text-blue-900 dark:text-blue-100">改进建议</h3>
+              <ul className="space-y-2">
+                {result.recommendations.map((rec, index) => (
+                  <li key={index} className="text-sm text-blue-800 dark:text-blue-200">
+                    • {rec}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </motion.div>
+        </div>
+
+        {/* 操作按钮 */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="flex gap-4"
+        >
+          <Button onClick={() => { setResult(null); setStep(1); }} className="flex-1">
+            重新计算
+          </Button>
+          <Button variant="outline" asChild className="flex-1">
+            <Link href="/landing">返回首页</Link>
+          </Button>
+        </motion.div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <Button variant="ghost" asChild>
+            <Link href="/landing">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              返回首页
+            </Link>
+          </Button>
+        </div>
+
+        <div className="max-w-3xl mx-auto">
+          {!result ? (
+            <div className="bg-card border rounded-xl p-8 shadow-lg">
+              {/* 进度指示器 */}
+              <div className="mb-8">
+                <div className="flex justify-between mb-2">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <div
+                      key={s}
+                      className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold ${
+                        s === step
+                          ? "bg-primary text-primary-foreground"
+                          : s < step
+                          ? "bg-primary/20 text-primary"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {s}
+                    </div>
+                  ))}
+                </div>
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div
+                    className="bg-primary rounded-full h-2 transition-all"
+                    style={{ width: `${(step / 5) * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* 步骤内容 */}
+              {step === 1 && renderStep1()}
+              {step === 2 && renderStep2()}
+              {step === 3 && renderStep3()}
+              {step === 4 && renderStep4()}
+              {step === 5 && renderStep5()}
+
+              {/* 导航按钮 */}
+              <div className="flex gap-4 mt-8">
+                {step > 1 && (
+                  <Button variant="outline" onClick={() => setStep(step - 1)} className="flex-1">
+                    上一步
+                  </Button>
+                )}
+                {step < 5 ? (
+                  <Button onClick={() => setStep(step + 1)} className="flex-1">
+                    下一步
+                  </Button>
+                ) : (
+                  <Button onClick={handleSubmit} className="flex-1">
+                    查看结果
+                  </Button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="bg-card border rounded-xl p-8 shadow-lg">
+              {renderResult()}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
