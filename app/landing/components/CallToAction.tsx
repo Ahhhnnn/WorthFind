@@ -13,7 +13,7 @@ export function CallToAction() {
           加入数千名职场人士，通过科学方法了解自己的工作性价比，做出更明智的职业决策
         </p>
         <Button size="lg" variant="secondary" className="mt-8 text-primary" asChild>
-          <Link href="#calculator">
+          <Link href="/calculator">
             免费开始计算 <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </Button>
