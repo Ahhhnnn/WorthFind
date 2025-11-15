@@ -1,17 +1,16 @@
 "use client";
 
-import { useState, useRef, useMemo, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, TrendingUp, TrendingDown, Minus, Info, LucideIcon, Camera, Check, DollarSign, Clock, TrendingUp as GrowthIcon, Smile, Heart } from "lucide-react";
-import Link from "next/link";
-import html2canvas from "html2canvas";
-import { motion, AnimatePresence } from "framer-motion";
-import { CollapsibleCard } from "@/components/CollapsibleCard";
-import { ScoreDashboard } from "@/components/ScoreDashboard";
-import { EmotionRating } from "@/components/EmotionRating";
 import { ButtonGroupRating } from "@/components/ButtonGroupRating";
-import { cn } from "@/lib/utils";
+import { CollapsibleCard } from "@/components/CollapsibleCard";
+import { EmotionRating } from "@/components/EmotionRating";
+import { ScoreDashboard } from "@/components/ScoreDashboard";
+import { Button } from "@/components/ui/button";
 import confetti from "canvas-confetti";
+import { motion } from "framer-motion";
+import html2canvas from "html2canvas";
+import { ArrowLeft, Camera, Check, Clock, DollarSign, TrendingUp as GrowthIcon, Heart, Info, LucideIcon, Minus, Smile, TrendingDown, TrendingUp } from "lucide-react";
+import Link from "next/link";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 interface FormData {
   monthlySalary: number;
@@ -179,7 +178,7 @@ export default function CalculatorPage() {
       const animationEnd = Date.now() + duration;
       const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-      const interval = setInterval(function() {
+      const interval = setInterval(function () {
         const timeLeft = animationEnd - Date.now();
 
         if (timeLeft <= 0) {
