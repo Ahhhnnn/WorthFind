@@ -15,77 +15,78 @@ interface ScoreDashboardProps {
   dimensions: DimensionScore[];
 }
 
-export function ScoreDashboard({ totalScore, dimensions }: ScoreDashboardProps) {
-  // 根据得分获取颜色
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-blue-600";
-    if (score >= 40) return "text-yellow-600";
-    return "text-red-600";
-  };
+// 根据得分获取颜色
+const getScoreColor = (score: number) => {
+  if (score >= 80) return "text-green-600";
+  if (score >= 60) return "text-blue-600";
+  if (score >= 40) return "text-yellow-600";
+  return "text-red-600";
+};
 
-  // 仪表盘环形进度条
-  const CircularProgress = ({ score, size = 120 }: { score: number; size?: number }) => {
-    const radius = (size - 10) / 2;
-    const circumference = 2 * Math.PI * radius;
-    const progress = (score / 100) * circumference;
+// 仪表盘环形进度条
+const CircularProgress = ({ score, size = 120 }: { score: number; size?: number }) => {
+  const radius = (size - 10) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const progress = (score / 100) * circumference;
 
-    return (
-      <div className={cn("relative", `w-${size / 4} h-${size / 4}`)} style={{ width: size, height: size }}>
-        <svg width={size} height={size} className="transform -rotate-90">
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            stroke="currentColor"
-            strokeWidth="8"
-            fill="none"
-            className="text-muted"
-          />
-          <motion.circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            stroke="currentColor"
-            strokeWidth="8"
-            fill="none"
-            strokeDasharray={circumference}
-            strokeDashoffset={circumference - progress}
-            strokeLinecap="round"
-            className={getScoreColor(score)}
-            initial={{ strokeDashoffset: circumference }}
-            animate={{ strokeDashoffset: circumference - progress }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-          />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className={cn("text-2xl font-bold", getScoreColor(score))}>
-            {score.toFixed(0)}
-          </span>
-          <span className="text-xs text-muted-foreground">综合得分</span>
-        </div>
-      </div>
-    );
-  };
-
-  // 小进度条
-  const MiniProgressBar = ({ score }: { score: number }) => {
-    return (
-      <div className="w-full bg-muted rounded-full h-1.5 mt-1">
-        <motion.div
-          className={cn("h-1.5 rounded-full", getScoreColor(score))}
-          initial={{ width: 0 }}
-          animate={{ width: `${score}%` }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
+  return (
+    <div className={cn("relative", `w-${size / 4} h-${size / 4}`)} style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="transform -rotate-90">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="currentColor"
+          strokeWidth="8"
+          fill="none"
+          className="text-muted"
         />
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="currentColor"
+          strokeWidth="8"
+          fill="none"
+          strokeDasharray={circumference}
+          strokeDashoffset={circumference - progress}
+          strokeLinecap="round"
+          className={getScoreColor(score)}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: circumference - progress }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className={cn("text-2xl font-bold", getScoreColor(score))}>
+          {score.toFixed(0)}
+        </span>
+        <span className="text-xs text-muted-foreground">综合得分</span>
       </div>
-    );
-  };
+    </div>
+  );
+};
+
+// 小进度条
+const MiniProgressBar = ({ score }: { score: number }) => {
+  return (
+    <div className="w-full bg-muted rounded-full h-1.5 mt-1">
+      <motion.div
+        className={cn("h-1.5 rounded-full", getScoreColor(score))}
+        initial={{ width: 0 }}
+        animate={{ width: `${score}%` }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      />
+    </div>
+  );
+};
+
+export function ScoreDashboard({ totalScore, dimensions }: ScoreDashboardProps) {
 
   return (
     <div className="mb-8 rounded-xl border bg-card shadow-sm overflow-hidden">
       {/* 顶部 - 综合得分仪表盘 */}
-      <div className="px-6 py-6 bg-gradient-to-r from-primary/5 to-secondary/5 border-b">
+      <div className="px-6 py-6 bg-linear-to-r from-primary/5 to-secondary/5 border-b">
         <div className="flex items-center justify-center gap-8">
           <CircularProgress score={totalScore} size={160} />
           <div className="space-y-1">

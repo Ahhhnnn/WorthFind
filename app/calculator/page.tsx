@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, TrendingUp, TrendingDown, Minus, Info, LucideIcon, Camera, Check, DollarSign, Clock, TrendingUp as GrowthIcon, Smile, Heart } from "lucide-react";
 import Link from "next/link";
@@ -77,15 +77,6 @@ export default function CalculatorPage() {
     workLifeBalance: 3,
   });
 
-  const [dimensionScores, setDimensionScores] = useState<DimensionScores>({
-    economic: 0,
-    time: 0,
-    growth: 0,
-    experience: 0,
-    balance: 0,
-    total: 0,
-  });
-
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
   const [captureSuccess, setCaptureSuccess] = useState(false);
@@ -95,7 +86,7 @@ export default function CalculatorPage() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const calculateDimensionScores = (): DimensionScores => {
+  const calculateDimensionScores = useCallback((): DimensionScores => {
     const totalAnnualIncome = formData.monthlySalary * 12 + formData.annualBonus + formData.benefits;
     const totalWorkHours = formData.weeklyHours * 52 + formData.commuteHours * 52 * 5;
     const hourlyRate = totalAnnualIncome / Math.max(totalWorkHours, 1);
@@ -137,14 +128,13 @@ export default function CalculatorPage() {
       balance: Math.round(balanceScore * 10) / 10,
       total: Math.round(totalScore * 10) / 10,
     };
-  };
-
-  useEffect(() => {
-    setDimensionScores(calculateDimensionScores());
   }, [formData]);
 
+  // 使用 useMemo 计算维度分数，避免级联渲染
+  const dimensionScores = useMemo(() => calculateDimensionScores(), [calculateDimensionScores]);
+
   const calculateScore = (): CalculationResult => {
-    const scores = calculateDimensionScores();
+    const scores = dimensionScores;
 
     const recommendations: string[] = [];
 
