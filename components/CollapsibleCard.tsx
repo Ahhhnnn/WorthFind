@@ -12,6 +12,7 @@ interface CollapsibleCardProps {
   defaultExpanded?: boolean;
   children: React.ReactNode;
   color?: "blue" | "green" | "purple" | "yellow" | "red" | "gray";
+  scoreText?: string; // 翻译文本："得分"
 }
 
 export function CollapsibleCard({
@@ -21,6 +22,7 @@ export function CollapsibleCard({
   defaultExpanded = false,
   children,
   color = "gray",
+  scoreText = "得分", // 默认中文
 }: CollapsibleCardProps) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
@@ -54,7 +56,7 @@ export function CollapsibleCard({
             <h3 className="text-lg font-semibold text-left">{title}</h3>
             {score > 0 && (
               <span className={cn("text-sm font-medium", getScoreColor())}>
-                得分: {score.toFixed(1)}
+                {scoreText}: {score.toFixed(1)}
               </span>
             )}
           </div>

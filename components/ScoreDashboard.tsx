@@ -13,6 +13,15 @@ interface DimensionScore {
 interface ScoreDashboardProps {
   totalScore: number; // 0-100
   dimensions: DimensionScore[];
+  translations?: {
+    title?: string;
+    overallScore?: string;
+    weight?: string;
+    statusExcellent?: string;
+    statusGood?: string;
+    statusAverage?: string;
+    statusPoor?: string;
+  };
 }
 
 // 根据得分获取颜色
@@ -24,7 +33,7 @@ const getScoreColor = (score: number) => {
 };
 
 // 仪表盘环形进度条
-const CircularProgress = ({ score, size = 120 }: { score: number; size?: number }) => {
+const CircularProgress = ({ score, size = 120, overallScoreText = "综合得分" }: { score: number; size?: number; overallScoreText?: string }) => {
   const radius = (size - 10) / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = (score / 100) * circumference;
@@ -61,7 +70,7 @@ const CircularProgress = ({ score, size = 120 }: { score: number; size?: number 
         <span className={cn("text-2xl font-bold", getScoreColor(score))}>
           {score.toFixed(0)}
         </span>
-        <span className="text-xs text-muted-foreground">综合得分</span>
+        <span className="text-xs text-muted-foreground">{overallScoreText}</span>
       </div>
     </div>
   );
@@ -81,24 +90,34 @@ const MiniProgressBar = ({ score }: { score: number }) => {
   );
 };
 
-export function ScoreDashboard({ totalScore, dimensions }: ScoreDashboardProps) {
+export function ScoreDashboard({ totalScore, dimensions, translations }: ScoreDashboardProps) {
+  // 默认翻译文本（中文）
+  const t = {
+    title: translations?.title || "工作性价比评分",
+    overallScore: translations?.overallScore || "综合得分",
+    weight: translations?.weight || "权重",
+    statusExcellent: translations?.statusExcellent || "🎉 优秀 - 你的工作性价比很高！",
+    statusGood: translations?.statusGood || "💼 良好 - 整体表现不错",
+    statusAverage: translations?.statusAverage || "😊 中等 - 还有提升空间",
+    statusPoor: translations?.statusPoor || "📈 待改善 - 建议重新评估"
+  };
 
   return (
     <div className="mb-8 rounded-xl border bg-card shadow-sm overflow-hidden">
       {/* 顶部 - 综合得分仪表盘 */}
       <div className="px-6 py-6 bg-linear-to-r from-primary/5 to-secondary/5 border-b">
         <div className="flex items-center justify-center gap-8">
-          <CircularProgress score={totalScore} size={160} />
+          <CircularProgress score={totalScore} size={160} overallScoreText={t.overallScore} />
           <div className="space-y-1">
-            <h2 className="text-xl font-bold">工作性价比评分</h2>
+            <h2 className="text-xl font-bold">{t.title}</h2>
             <p className={cn("text-3xl font-extrabold", getScoreColor(totalScore))}>
               {totalScore.toFixed(1)}
             </p>
             <p className="text-sm text-muted-foreground">
-              {totalScore >= 80 && "🎉 优秀 - 你的工作性价比很高！"}
-              {totalScore >= 60 && totalScore < 80 && "💼 良好 - 整体表现不错"}
-              {totalScore >= 40 && totalScore < 60 && "😊 中等 - 还有提升空间"}
-              {totalScore < 40 && "📈 待改善 - 建议重新评估"}
+              {totalScore >= 80 && t.statusExcellent}
+              {totalScore >= 60 && totalScore < 80 && t.statusGood}
+              {totalScore >= 40 && totalScore < 60 && t.statusAverage}
+              {totalScore < 40 && t.statusPoor}
             </p>
           </div>
         </div>
@@ -128,7 +147,7 @@ export function ScoreDashboard({ totalScore, dimensions }: ScoreDashboardProps) 
               </div>
               <MiniProgressBar score={dim.score} />
               <span className="text-xs text-muted-foreground mt-1 block">
-                权重: {dim.percentage}%
+                {t.weight}: {dim.percentage}%
               </span>
             </motion.div>
           ))}

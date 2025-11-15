@@ -1,0 +1,225 @@
+{
+  "Header": {
+    "title": "工作价值计算器",
+    "nav": {
+      "features": "功能特性",
+      "howItWorks": "如何运作",
+      "testimonials": "用户评价"
+    },
+    "theme": {
+      "toggle": "切换主题"
+    },
+    "language": {
+      "toggle": "切换语言"
+    }
+  },
+  "Hero": {
+    "title": "科学评估你的工作",
+    "titleHighlight": "性价比",
+    "subtitle": "通过结构化模型，全面分析你的工作投入与产出比例，帮助你做出更明智的职业决策",
+    "cta": {
+      "start": "开始计算",
+      "learnMore": "了解更多"
+    },
+    "highlights": {
+      "precision": {
+        "title": "精准测量",
+        "description": "多维度评估工作回报与付出"
+      },
+      "dataDriven": {
+        "title": "数据驱动",
+        "description": "基于科学模型的客观分析"
+      },
+      "support": {
+        "title": "决策支持",
+        "description": "为职业发展提供有力参考"
+      }
+    }
+  },
+  "Features": {
+    "title": "为什么选择我们的工作价值计算器？",
+    "subtitle": "我们提供一套完整的解决方案，帮助你全面评估工作性价比",
+    "list": {
+      "customized": {
+        "title": "个性化评估模型",
+        "description": "根据你的具体情况定制评估标准，确保结果贴合实际"
+      },
+      "multiDimensional": {
+        "title": "多维度分析",
+        "description": "综合考虑薪资、成长空间、工作环境等多个关键因素"
+      },
+      "trend": {
+        "title": "趋势预测",
+        "description": "不仅评估现状，还能预测未来发展潜力"
+      },
+      "comparison": {
+        "title": "同行对比",
+        "description": "匿名对比行业平均水平，了解自身定位"
+      },
+      "suggestions": {
+        "title": "改进建议",
+        "description": "基于评估结果提供可操作的优化建议"
+      },
+      "decision": {
+        "title": "决策支持",
+        "description": "为跳槽、升职谈判等重要决策提供数据支撑"
+      }
+    }
+  },
+  "HowItWorks": {
+    "title": "工作价值评估是如何运作的?",
+    "subtitle": "简单三步，全面了解你的工作性价比",
+    "steps": {
+      "step1": {
+        "title": "填写评估表",
+        "description": "输入关于薪资、福利、工作强度、成长机会等详细信息"
+      },
+      "step2": {
+        "title": "智能分析",
+        "description": "系统基于科学模型对各项指标进行量化分析和加权计算"
+      },
+      "step3": {
+        "title": "获取报告",
+        "description": "获得详细的价值评分和个性化改进建议"
+      }
+    },
+    "cta": "立即体验"
+  },
+  "CallToAction": {
+    "title": "准备好评估你的工作价值了吗？",
+    "subtitle": "加入数千名职场人士，通过科学方法了解自己的工作性价比，做出更明智的职业决策",
+    "cta": "免费开始计算"
+  },
+  "Footer": {
+    "title": "工作价值计算器",
+    "copyright": "© {year} 工作价值计算器. 保留所有权利.",
+    "theme": {
+      "light": "浅色",
+      "dark": "深色",
+      "system": "跟随系统",
+      "lightLabel": "浅色模式",
+      "darkLabel": "深色模式",
+      "systemLabel": "跟随系统"
+    }
+  },
+  "Calculator": {
+    "backToHome": "返回首页",
+    "title": "工作性价比评估",
+    "subtitle": "填写以下各维度信息，实时查看你的得分",
+    "generateReport": "生成完整报告",
+    "recalculate": "重新计算",
+    "saveAsImage": "保存为图片",
+    "capturing": "截图中...",
+    "savedToClipboard": "已保存到剪贴板",
+    "reportTitle": "你的工作性价比评估报告",
+    "overallScore": "综合得分",
+    "dimensionScores": "各维度得分",
+    "keyMetrics": "关键指标",
+    "hourlyValue": "时薪价值",
+    "totalWorkHours": "年工作总时长",
+    "hours": "小时",
+    "suggestions": "改进建议",
+    "dashboard": {
+      "title": "工作性价比评分",
+      "overallScore": "综合得分",
+      "weight": "权重",
+      "statusExcellent": "🎉 优秀 - 你的工作性价比很高！",
+      "statusGood": "💼 良好 - 整体表现不错",
+      "statusAverage": "😊 中等 - 还有提升空间",
+      "statusPoor": "📈 待改善 - 建议重新评估"
+    },
+    "card": {
+      "score": "得分"
+    },
+    "levels": {
+      "excellent": "优秀",
+      "good": "良好",
+      "average": "中等",
+      "needsImprovement": "待改善"
+    },
+    "humorLabels": {
+      "winner": "🎉 人生赢家",
+      "elite": "😎 职场精英",
+      "whiteCollar": "💼 白领一族",
+      "striver": "🏃 奋斗青年",
+      "worker": "😅 打工人",
+      "tool": "😓 工具人",
+      "horse": "🐴 现代牛马",
+      "sweatshop": "💀 血汗工厂"
+    },
+    "humorDescriptions": {
+      "winner": "这就是传说中的躺赢模式",
+      "elite": "别人996，你在享受生活",
+      "whiteCollar": "体面工作，稳中向好",
+      "striver": "有点累但还算值得",
+      "worker": "标准社畜，勉强糊口",
+      "tool": "付出与回报不太匹配",
+      "horse": "建议考虑跳槽改命",
+      "sweatshop": "快跑！留得青山在"
+    },
+    "dimensions": {
+      "economic": {
+        "title": "💰 经济回报",
+        "label": "经济回报",
+        "monthlySalary": "月薪收入（元）",
+        "monthlySalaryPlaceholder": "如：15000",
+        "annualBonus": "年终奖（元）",
+        "annualBonusPlaceholder": "如：30000",
+        "benefits": "其他福利年价值（元）",
+        "benefitsPlaceholder": "如：5000（五险一金、补贴等折算年价值）",
+        "benefitsHint": "包括五险一金、交通补贴、餐补等"
+      },
+      "time": {
+        "title": "⏰ 时间成本",
+        "label": "时间成本",
+        "weeklyHours": "周工作时长（小时）",
+        "weeklyHoursPlaceholder": "如：40",
+        "commuteHours": "每日通勤时长（小时）",
+        "commuteHoursPlaceholder": "如：2（往返总时长）",
+        "overtimeFrequency": "加班频率",
+        "overtimeLabels": ["几乎不", "很少", "有时", "经常", "总是"]
+      },
+      "growth": {
+        "title": "📈 成长价值",
+        "label": "成长价值",
+        "skillGrowth": "技能提升机会",
+        "skillGrowthLabels": ["很少学习", "偶尔学习", "一般", "经常学习", "持续成长"],
+        "promotionChance": "晋升空间",
+        "promotionChanceLabels": ["几乎没机会", "机会很小", "中等机会", "机会较多", "机会很多"],
+        "industryProspect": "行业前景",
+        "industryProspectLabels": ["前景堪忧", "不太乐观", "一般", "比较光明", "前景光明"]
+      },
+      "experience": {
+        "title": "😊 工作体验",
+        "label": "工作体验",
+        "workPressure": "工作压力",
+        "workPressureLabels": ["压力很小", "压力较小", "压力适中", "压力较大", "压力很大"],
+        "teamAtmosphere": "团队氛围",
+        "teamAtmosphereLabels": ["氛围较差", "不太好", "一般", "比较好", "氛围很好"],
+        "workInterest": "工作兴趣度",
+        "workInterestLabels": ["不感兴趣", "不太喜欢", "一般", "比较喜欢", "非常喜欢"]
+      },
+      "balance": {
+        "title": "⚖️ 生活平衡",
+        "label": "生活平衡",
+        "workFlexibility": "工作灵活度",
+        "workFlexibilityLabels": ["很不灵活", "不太灵活", "一般", "比较灵活", "非常灵活"],
+        "vacationBenefit": "假期福利",
+        "vacationBenefitLabels": ["假期很少", "较少", "一般", "比较多", "假期充足"],
+        "workLifeBalance": "工作生活平衡",
+        "workLifeBalanceLabels": ["严重失衡", "比较失衡", "一般", "比较平衡", "平衡良好"]
+      }
+    },
+    "recommendations": {
+      "lowEconomic": "经济回报偏低，建议考虑薪资谈判或寻找更好的机会",
+      "highTimeCost": "时间成本过高，建议优化工作时间或减少通勤时间",
+      "limitedGrowth": "成长空间有限，建议主动寻求学习机会或考虑转型",
+      "poorExperience": "工作体验不佳，建议与管理层沟通或考虑换环境",
+      "imbalance": "工作生活失衡，建议设定明确边界或寻求更灵活的工作",
+      "excellent": "整体性价比优秀，继续保持并寻求更高层次发展",
+      "good": "整体表现良好，可针对薄弱维度进行优化",
+      "average": "性价比中等，建议制定改进计划，考虑是否需要做出改变",
+      "poor": "性价比较低，强烈建议重新评估职业选择，寻求更好的机会"
+    }
+  }
+}

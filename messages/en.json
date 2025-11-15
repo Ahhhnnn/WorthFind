@@ -1,0 +1,225 @@
+{
+  "Header": {
+    "title": "Work Value Calculator",
+    "nav": {
+      "features": "Features",
+      "howItWorks": "How It Works",
+      "testimonials": "Testimonials"
+    },
+    "theme": {
+      "toggle": "Toggle theme"
+    },
+    "language": {
+      "toggle": "Switch language"
+    }
+  },
+  "Hero": {
+    "title": "Scientifically Assess Your Work ",
+    "titleHighlight": "Value",
+    "subtitle": "Comprehensively analyze your work input-output ratio through a structured model to help you make smarter career decisions",
+    "cta": {
+      "start": "Start Calculating",
+      "learnMore": "Learn More"
+    },
+    "highlights": {
+      "precision": {
+        "title": "Precise Measurement",
+        "description": "Multi-dimensional assessment of work rewards and efforts"
+      },
+      "dataDriven": {
+        "title": "Data-Driven",
+        "description": "Objective analysis based on scientific models"
+      },
+      "support": {
+        "title": "Decision Support",
+        "description": "Powerful reference for career development"
+      }
+    }
+  },
+  "Features": {
+    "title": "Why Choose Our Work Value Calculator?",
+    "subtitle": "We provide a complete solution to help you comprehensively assess your work value",
+    "list": {
+      "customized": {
+        "title": "Personalized Assessment Model",
+        "description": "Customize evaluation criteria based on your specific situation for practical results"
+      },
+      "multiDimensional": {
+        "title": "Multi-Dimensional Analysis",
+        "description": "Comprehensively consider salary, growth opportunities, work environment and other key factors"
+      },
+      "trend": {
+        "title": "Trend Prediction",
+        "description": "Not only assess current status but also predict future development potential"
+      },
+      "comparison": {
+        "title": "Peer Comparison",
+        "description": "Anonymous comparison with industry average to understand your position"
+      },
+      "suggestions": {
+        "title": "Improvement Suggestions",
+        "description": "Provide actionable optimization suggestions based on assessment results"
+      },
+      "decision": {
+        "title": "Decision Support",
+        "description": "Provide data support for important decisions such as job hopping and promotion negotiations"
+      }
+    }
+  },
+  "HowItWorks": {
+    "title": "How Does Work Value Assessment Work?",
+    "subtitle": "Three simple steps to fully understand your work value",
+    "steps": {
+      "step1": {
+        "title": "Fill Out Assessment",
+        "description": "Enter detailed information about salary, benefits, work intensity, growth opportunities, etc."
+      },
+      "step2": {
+        "title": "Intelligent Analysis",
+        "description": "System performs quantitative analysis and weighted calculation of indicators based on scientific models"
+      },
+      "step3": {
+        "title": "Get Report",
+        "description": "Receive detailed value scores and personalized improvement suggestions"
+      }
+    },
+    "cta": "Try It Now"
+  },
+  "CallToAction": {
+    "title": "Ready to Assess Your Work Value?",
+    "subtitle": "Join thousands of professionals, understand your work value through scientific methods, and make smarter career decisions",
+    "cta": "Start Calculating for Free"
+  },
+  "Footer": {
+    "title": "Work Value Calculator",
+    "copyright": "© {year} Work Value Calculator. All rights reserved.",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "lightLabel": "Light mode",
+      "darkLabel": "Dark mode",
+      "systemLabel": "Follow system"
+    }
+  },
+  "Calculator": {
+    "backToHome": "Back to Home",
+    "title": "Work Value Assessment",
+    "subtitle": "Fill in the following information to see your score in real-time",
+    "generateReport": "Generate Full Report",
+    "recalculate": "Recalculate",
+    "saveAsImage": "Save as Image",
+    "capturing": "Capturing...",
+    "savedToClipboard": "Saved to Clipboard",
+    "reportTitle": "Your Work Value Assessment Report",
+    "overallScore": "Overall Score",
+    "dimensionScores": "Dimension Scores",
+    "keyMetrics": "Key Metrics",
+    "hourlyValue": "Hourly Value",
+    "totalWorkHours": "Total Annual Work Hours",
+    "hours": "hours",
+    "suggestions": "Improvement Suggestions",
+    "dashboard": {
+      "title": "Work Value Score",
+      "overallScore": "Overall Score",
+      "weight": "Weight",
+      "statusExcellent": "🎉 Excellent - Your work value is very high!",
+      "statusGood": "💼 Good - Overall performance is good",
+      "statusAverage": "😊 Average - Room for improvement",
+      "statusPoor": "📈 Needs Improvement - Recommend reassessment"
+    },
+    "card": {
+      "score": "Score"
+    },
+    "levels": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "average": "Average",
+      "needsImprovement": "Needs Improvement"
+    },
+    "humorLabels": {
+      "winner": "🎉 Life Winner",
+      "elite": "😎 Career Elite",
+      "whiteCollar": "💼 White Collar",
+      "striver": "🏃 Young Striver",
+      "worker": "😅 Worker",
+      "tool": "😓 Tool Person",
+      "horse": "🐴 Work Horse",
+      "sweatshop": "💀 Sweatshop"
+    },
+    "humorDescriptions": {
+      "winner": "Living the dream life",
+      "elite": "Others do 996, you enjoy life",
+      "whiteCollar": "Decent job, steady progress",
+      "striver": "A bit tiring but worth it",
+      "worker": "Standard worker, barely surviving",
+      "tool": "Effort doesn't match return",
+      "horse": "Consider job hopping",
+      "sweatshop": "Run! Save yourself"
+    },
+    "dimensions": {
+      "economic": {
+        "title": "💰 Economic Return",
+        "label": "Economic Return",
+        "monthlySalary": "Monthly Salary (CNY)",
+        "monthlySalaryPlaceholder": "e.g., 15000",
+        "annualBonus": "Annual Bonus (CNY)",
+        "annualBonusPlaceholder": "e.g., 30000",
+        "benefits": "Other Benefits Annual Value (CNY)",
+        "benefitsPlaceholder": "e.g., 5000 (insurance, subsidies, etc.)",
+        "benefitsHint": "Including insurance, transport allowance, meal allowance, etc."
+      },
+      "time": {
+        "title": "⏰ Time Cost",
+        "label": "Time Cost",
+        "weeklyHours": "Weekly Working Hours",
+        "weeklyHoursPlaceholder": "e.g., 40",
+        "commuteHours": "Daily Commute Hours",
+        "commuteHoursPlaceholder": "e.g., 2 (round trip)",
+        "overtimeFrequency": "Overtime Frequency",
+        "overtimeLabels": ["Rarely", "Seldom", "Sometimes", "Often", "Always"]
+      },
+      "growth": {
+        "title": "📈 Growth Value",
+        "label": "Growth Value",
+        "skillGrowth": "Skill Development Opportunities",
+        "skillGrowthLabels": ["Minimal learning", "Occasional learning", "Average", "Frequent learning", "Continuous growth"],
+        "promotionChance": "Promotion Opportunities",
+        "promotionChanceLabels": ["Almost none", "Very few", "Moderate", "Quite a few", "Many"],
+        "industryProspect": "Industry Outlook",
+        "industryProspectLabels": ["Worrying", "Not optimistic", "Average", "Promising", "Very bright"]
+      },
+      "experience": {
+        "title": "😊 Work Experience",
+        "label": "Work Experience",
+        "workPressure": "Work Pressure",
+        "workPressureLabels": ["Very low", "Low", "Moderate", "High", "Very high"],
+        "teamAtmosphere": "Team Atmosphere",
+        "teamAtmosphereLabels": ["Poor", "Not good", "Average", "Good", "Excellent"],
+        "workInterest": "Work Interest",
+        "workInterestLabels": ["Not interested", "Don't like much", "Average", "Quite like", "Love it"]
+      },
+      "balance": {
+        "title": "⚖️ Life Balance",
+        "label": "Life Balance",
+        "workFlexibility": "Work Flexibility",
+        "workFlexibilityLabels": ["Very inflexible", "Inflexible", "Average", "Flexible", "Very flexible"],
+        "vacationBenefit": "Vacation Benefits",
+        "vacationBenefitLabels": ["Very few", "Few", "Average", "Quite a few", "Abundant"],
+        "workLifeBalance": "Work-Life Balance",
+        "workLifeBalanceLabels": ["Severely imbalanced", "Imbalanced", "Average", "Balanced", "Well balanced"]
+      }
+    },
+    "recommendations": {
+      "lowEconomic": "Low economic return, consider salary negotiation or seeking better opportunities",
+      "highTimeCost": "High time cost, consider optimizing work hours or reducing commute time",
+      "limitedGrowth": "Limited growth opportunities, actively seek learning opportunities or consider career change",
+      "poorExperience": "Poor work experience, communicate with management or consider changing environment",
+      "imbalance": "Work-life imbalance, set clear boundaries or seek more flexible work",
+      "excellent": "Excellent overall value, keep it up and seek higher-level development",
+      "good": "Good overall performance, optimize weak dimensions",
+      "average": "Average value, consider making improvement plans and whether changes are needed",
+      "poor": "Low value, strongly recommend reevaluating career choices and seeking better opportunities"
+    }
+  }
+}

@@ -9,8 +9,9 @@ import confetti from "canvas-confetti";
 import { motion } from "framer-motion";
 import html2canvas from "html2canvas";
 import { ArrowLeft, Camera, Check, Clock, DollarSign, TrendingUp as GrowthIcon, Heart, Info, LucideIcon, Minus, Smile, TrendingDown, TrendingUp } from "lucide-react";
-import Link from "next/link";
+import { Link } from '@/i18n/routing';
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useTranslations } from 'next-intl';
 
 interface FormData {
   monthlySalary: number;
@@ -58,6 +59,7 @@ interface DimensionScores {
 }
 
 export default function CalculatorPage() {
+  const t = useTranslations('Calculator');
   const [formData, setFormData] = useState<FormData>({
     monthlySalary: 0,
     annualBonus: 0,
@@ -138,29 +140,29 @@ export default function CalculatorPage() {
     const recommendations: string[] = [];
 
     if (scores.economic < 20) {
-      recommendations.push("经济回报偏低，建议考虑薪资谈判或寻找更好的机会");
+      recommendations.push(t('recommendations.lowEconomic'));
     }
     if (scores.time < 15) {
-      recommendations.push("时间成本过高，建议优化工作时间或减少通勤时间");
+      recommendations.push(t('recommendations.highTimeCost'));
     }
     if (scores.growth < 12) {
-      recommendations.push("成长空间有限，建议主动寻求学习机会或考虑转型");
+      recommendations.push(t('recommendations.limitedGrowth'));
     }
     if (scores.experience < 9) {
-      recommendations.push("工作体验不佳，建议与管理层沟通或考虑换环境");
+      recommendations.push(t('recommendations.poorExperience'));
     }
     if (scores.balance < 6) {
-      recommendations.push("工作生活失衡，建议设定明确边界或寻求更灵活的工作");
+      recommendations.push(t('recommendations.imbalance'));
     }
 
     if (scores.total >= 80) {
-      recommendations.push("整体性价比优秀，继续保持并寻求更高层次发展");
+      recommendations.push(t('recommendations.excellent'));
     } else if (scores.total >= 60) {
-      recommendations.push("整体表现良好，可针对薄弱维度进行优化");
+      recommendations.push(t('recommendations.good'));
     } else if (scores.total >= 40) {
-      recommendations.push("性价比中等，建议制定改进计划，考虑是否需要做出改变");
+      recommendations.push(t('recommendations.average'));
     } else {
-      recommendations.push("性价比较低，强烈建议重新评估职业选择，寻求更好的机会");
+      recommendations.push(t('recommendations.poor'));
     }
 
     // 礼花特效，只在60分以上时显示
@@ -241,53 +243,53 @@ export default function CalculatorPage() {
     let humorDescription = "";
 
     if (scores.total >= 90) {
-      level = "优秀";
+      level = t('levels.excellent');
       color = "text-green-600";
       icon = TrendingUp;
-      humorLabel = "🎉 人生赢家";
-      humorDescription = "这就是传说中的躺赢模式";
+      humorLabel = t('humorLabels.winner');
+      humorDescription = t('humorDescriptions.winner');
     } else if (scores.total >= 80) {
-      level = "优秀";
+      level = t('levels.excellent');
       color = "text-green-600";
       icon = TrendingUp;
-      humorLabel = "😎 职场精英";
-      humorDescription = "别人996，你在享受生活";
+      humorLabel = t('humorLabels.elite');
+      humorDescription = t('humorDescriptions.elite');
     } else if (scores.total >= 70) {
-      level = "良好";
+      level = t('levels.good');
       color = "text-blue-600";
       icon = TrendingUp;
-      humorLabel = "💼 白领一族";
-      humorDescription = "体面工作，稳中向好";
+      humorLabel = t('humorLabels.whiteCollar');
+      humorDescription = t('humorDescriptions.whiteCollar');
     } else if (scores.total >= 60) {
-      level = "良好";
+      level = t('levels.good');
       color = "text-blue-600";
       icon = TrendingUp;
-      humorLabel = "🏃 奋斗青年";
-      humorDescription = "有点累但还算值得";
+      humorLabel = t('humorLabels.striver');
+      humorDescription = t('humorDescriptions.striver');
     } else if (scores.total >= 50) {
-      level = "中等";
+      level = t('levels.average');
       color = "text-yellow-600";
       icon = Minus;
-      humorLabel = "😅 打工人";
-      humorDescription = "标准社畜，勉强糊口";
+      humorLabel = t('humorLabels.worker');
+      humorDescription = t('humorDescriptions.worker');
     } else if (scores.total >= 40) {
-      level = "中等";
+      level = t('levels.average');
       color = "text-yellow-600";
       icon = Minus;
-      humorLabel = "😓 工具人";
-      humorDescription = "付出与回报不太匹配";
+      humorLabel = t('humorLabels.tool');
+      humorDescription = t('humorDescriptions.tool');
     } else if (scores.total >= 30) {
-      level = "待改善";
+      level = t('levels.needsImprovement');
       color = "text-red-600";
       icon = TrendingDown;
-      humorLabel = "🐴 现代牛马";
-      humorDescription = "建议考虑跳槽改命";
+      humorLabel = t('humorLabels.horse');
+      humorDescription = t('humorDescriptions.horse');
     } else {
-      level = "待改善";
+      level = t('levels.needsImprovement');
       color = "text-red-600";
       icon = TrendingDown;
-      humorLabel = "💀 血汗工厂";
-      humorDescription = "快跑！留得青山在";
+      humorLabel = t('humorLabels.sweatshop');
+      humorDescription = t('humorDescriptions.sweatshop');
     }
 
     const totalAnnualIncome = formData.monthlySalary * 12 + formData.annualBonus + formData.benefits;
@@ -351,7 +353,7 @@ export default function CalculatorPage() {
             console.error('复制到剪贴板失败:', err);
             const url = canvas.toDataURL('image/png');
             const link = document.createElement('a');
-            link.download = `工作性价比报告-${new Date().getTime()}.png`;
+            link.download = `${t('reportTitle')}-${new Date().getTime()}.png`;
             link.href = url;
             link.click();
 
@@ -389,12 +391,12 @@ export default function CalculatorPage() {
             {captureSuccess ? (
               <>
                 <Check className="h-4 w-4 text-green-600" />
-                已保存到剪贴板
+                {t('savedToClipboard')}
               </>
             ) : (
               <>
                 <Camera className="h-4 w-4" />
-                {isCapturing ? '截图中...' : '保存为图片'}
+                {isCapturing ? t('capturing') : t('saveAsImage')}
               </>
             )}
           </Button>
@@ -407,11 +409,11 @@ export default function CalculatorPage() {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h2 className="text-3xl font-bold mb-4">你的工作性价比评估报告</h2>
+            <h2 className="text-3xl font-bold mb-4">{t('reportTitle')}</h2>
             <div className="inline-flex items-center gap-3 bg-card border rounded-xl p-6">
               <Icon className={`h-12 w-12 ${result.color}`} />
               <div className="text-left">
-                <div className="text-sm text-muted-foreground">综合得分</div>
+                <div className="text-sm text-muted-foreground">{t('overallScore')}</div>
                 <div className="text-4xl font-bold">{result.totalScore}</div>
                 <div className={`text-lg font-semibold ${result.color}`}>{result.level}</div>
               </div>
@@ -434,14 +436,14 @@ export default function CalculatorPage() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="bg-card border rounded-xl p-6"
           >
-            <h3 className="text-xl font-bold mb-4">各维度得分</h3>
+            <h3 className="text-xl font-bold mb-4">{t('dimensionScores')}</h3>
             <div className="space-y-4">
               {[
-                { key: "economic", label: "经济回报", icon: "💰" },
-                { key: "time", label: "时间成本", icon: "⏰" },
-                { key: "growth", label: "成长价值", icon: "📈" },
-                { key: "experience", label: "工作体验", icon: "😊" },
-                { key: "balance", label: "生活平衡", icon: "⚖️" },
+                { key: "economic", label: t('dimensions.economic.label'), icon: "💰" },
+                { key: "time", label: t('dimensions.time.label'), icon: "⏰" },
+                { key: "growth", label: t('dimensions.growth.label'), icon: "📈" },
+                { key: "experience", label: t('dimensions.experience.label'), icon: "😊" },
+                { key: "balance", label: t('dimensions.balance.label'), icon: "⚖️" },
               ].map(({ key, label, icon }, index) => {
                 const dim = result.dimensions[key as keyof typeof result.dimensions];
                 const maxScore = dim.percentage;
@@ -478,16 +480,16 @@ export default function CalculatorPage() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="bg-card border rounded-xl p-6"
           >
-            <h3 className="text-xl font-bold mb-4">关键指标</h3>
+            <h3 className="text-xl font-bold mb-4">{t('keyMetrics')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-muted/50 rounded-lg p-4">
-                <div className="text-sm text-muted-foreground mb-1">时薪价值</div>
+                <div className="text-sm text-muted-foreground mb-1">{t('hourlyValue')}</div>
                 <div className="text-2xl font-bold">¥{result.hourlyValue.toFixed(2)}</div>
               </div>
               <div className="bg-muted/50 rounded-lg p-4">
-                <div className="text-sm text-muted-foreground mb-1">年工作总时长</div>
+                <div className="text-sm text-muted-foreground mb-1">{t('totalWorkHours')}</div>
                 <div className="text-2xl font-bold">
-                  {((formData.weeklyHours + formData.commuteHours * 5) * 52).toFixed(0)}小时
+                  {((formData.weeklyHours + formData.commuteHours * 5) * 52).toFixed(0)}{t('hours')}
                 </div>
               </div>
             </div>
@@ -502,7 +504,7 @@ export default function CalculatorPage() {
             <div className="flex items-start gap-3">
               <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
               <div>
-                <h3 className="text-lg font-bold mb-3 text-blue-900 dark:text-blue-100">改进建议</h3>
+                <h3 className="text-lg font-bold mb-3 text-blue-900 dark:text-blue-100">{t('suggestions')}</h3>
                 <ul className="space-y-2">
                   {result.recommendations.map((rec, index) => (
                     <motion.li
@@ -528,10 +530,10 @@ export default function CalculatorPage() {
           className="flex gap-4"
         >
           <Button onClick={() => { setResult(null); }} className="flex-1">
-            重新计算
+            {t('recalculate')}
           </Button>
           <Button variant="outline" asChild className="flex-1">
-            <Link href="/landing">返回首页</Link>
+            <Link href="/landing">{t('backToHome')}</Link>
           </Button>
         </motion.div>
       </div>
@@ -545,7 +547,7 @@ export default function CalculatorPage() {
           <Button variant="ghost" asChild>
             <Link href="/landing">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              返回首页
+              {t('backToHome')}
             </Link>
           </Button>
         </div>
@@ -554,142 +556,178 @@ export default function CalculatorPage() {
           {!result ? (
             <div className="space-y-6">
               <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold mb-2">工作性价比评估</h1>
-                <p className="text-muted-foreground">填写以下各维度信息，实时查看你的得分</p>
+                <h1 className="text-3xl font-bold mb-2">{t('title')}</h1>
+                <p className="text-muted-foreground">{t('subtitle')}</p>
               </div>
 
               <ScoreDashboard
                 totalScore={dimensionScores.total}
                 dimensions={[
-                  { score: dimensionScores.economic, label: "经济回报", percentage: 30, icon: "💰" },
-                  { score: dimensionScores.time, label: "时间成本", percentage: 25, icon: "⏰" },
-                  { score: dimensionScores.growth, label: "成长价值", percentage: 20, icon: "📈" },
-                  { score: dimensionScores.experience, label: "工作体验", percentage: 15, icon: "😊" },
-                  { score: dimensionScores.balance, label: "生活平衡", percentage: 10, icon: "⚖️" },
+                  { score: dimensionScores.economic, label: t('dimensions.economic.label'), percentage: 30, icon: "💰" },
+                  { score: dimensionScores.time, label: t('dimensions.time.label'), percentage: 25, icon: "⏰" },
+                  { score: dimensionScores.growth, label: t('dimensions.growth.label'), percentage: 20, icon: "📈" },
+                  { score: dimensionScores.experience, label: t('dimensions.experience.label'), percentage: 15, icon: "😊" },
+                  { score: dimensionScores.balance, label: t('dimensions.balance.label'), percentage: 10, icon: "⚖️" },
                 ]}
+                translations={{
+                  title: t('dashboard.title'),
+                  overallScore: t('dashboard.overallScore'),
+                  weight: t('dashboard.weight'),
+                  statusExcellent: t('dashboard.statusExcellent'),
+                  statusGood: t('dashboard.statusGood'),
+                  statusAverage: t('dashboard.statusAverage'),
+                  statusPoor: t('dashboard.statusPoor')
+                }}
               />
 
               <CollapsibleCard
-                title="💰 经济回报"
+                title={t('dimensions.economic.title')}
                 icon={<DollarSign className="h-5 w-5 text-blue-600" />}
                 score={dimensionScores.economic}
                 color="blue"
+                scoreText={t('card.score')}
               >
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">月薪收入（元）</label>
+                    <label className="block text-sm font-medium mb-2">{t('dimensions.economic.monthlySalary')}</label>
                     <input
                       type="number"
                       value={formData.monthlySalary || ""}
                       onChange={(e) => updateFormData("monthlySalary", Number(e.target.value))}
                       className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"
-                      placeholder="如：15000"
+                      placeholder={t('dimensions.economic.monthlySalaryPlaceholder')}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">年终奖（元）</label>
+                    <label className="block text-sm font-medium mb-2">{t('dimensions.economic.annualBonus')}</label>
                     <input
                       type="number"
                       value={formData.annualBonus || ""}
                       onChange={(e) => updateFormData("annualBonus", Number(e.target.value))}
                       className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"
-                      placeholder="如：30000"
+                      placeholder={t('dimensions.economic.annualBonusPlaceholder')}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">其他福利年价值（元）</label>
+                    <label className="block text-sm font-medium mb-2">{t('dimensions.economic.benefits')}</label>
                     <input
                       type="number"
                       value={formData.benefits || ""}
                       onChange={(e) => updateFormData("benefits", Number(e.target.value))}
                       className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"
-                      placeholder="如：5000（五险一金、补贴等折算年价值）"
+                      placeholder={t('dimensions.economic.benefitsPlaceholder')}
                     />
-                    <p className="text-xs text-muted-foreground mt-1">包括五险一金、交通补贴、餐补等</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('dimensions.economic.benefitsHint')}</p>
                   </div>
                 </div>
               </CollapsibleCard>
 
               <CollapsibleCard
-                title="⏰ 时间成本"
+                title={t('dimensions.time.title')}
                 icon={<Clock className="h-5 w-5 text-green-600" />}
                 score={dimensionScores.time}
                 color="green"
+                scoreText={t('card.score')}
               >
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">周工作时长（小时）</label>
+                    <label className="block text-sm font-medium mb-2">{t('dimensions.time.weeklyHours')}</label>
                     <input
                       type="number"
                       value={formData.weeklyHours || ""}
                       onChange={(e) => updateFormData("weeklyHours", Number(e.target.value))}
                       className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"
-                      placeholder="如：40"
+                      placeholder={t('dimensions.time.weeklyHoursPlaceholder')}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">每日通勤时长（小时）</label>
+                    <label className="block text-sm font-medium mb-2">{t('dimensions.time.commuteHours')}</label>
                     <input
                       type="number"
                       step="0.5"
                       value={formData.commuteHours || ""}
                       onChange={(e) => updateFormData("commuteHours", Number(e.target.value))}
                       className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"
-                      placeholder="如：2（往返总时长）"
+                      placeholder={t('dimensions.time.commuteHoursPlaceholder')}
                     />
                   </div>
                   <div>
                     <EmotionRating
                       value={formData.overtimeFrequency}
                       onChange={(value) => updateFormData("overtimeFrequency", value)}
-                      labels={["几乎不", "很少", "有时", "经常", "总是"]}
+                      labels={[
+                        t('dimensions.time.overtimeLabels.0'),
+                        t('dimensions.time.overtimeLabels.1'),
+                        t('dimensions.time.overtimeLabels.2'),
+                        t('dimensions.time.overtimeLabels.3'),
+                        t('dimensions.time.overtimeLabels.4')
+                      ]}
                       icons={["😊", "🙂", "😐", "😟", "😫"]}
                     />
-                    <p className="text-xs text-muted-foreground mt-2 text-center">加班频率</p>
+                    <p className="text-xs text-muted-foreground mt-2 text-center">{t('dimensions.time.overtimeFrequency')}</p>
                   </div>
                 </div>
               </CollapsibleCard>
 
               <CollapsibleCard
-                title="📈 成长价值"
+                title={t('dimensions.growth.title')}
                 icon={<GrowthIcon className="h-5 w-5 text-purple-600" />}
                 score={dimensionScores.growth}
                 color="purple"
+                scoreText={t('card.score')}
               >
                 <div className="space-y-6">
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">技能提升机会</span>
+                      <span className="text-sm font-medium">{t('dimensions.growth.skillGrowth')}</span>
                       <span className="text-xs text-muted-foreground">(1-5分)</span>
                     </div>
                     <ButtonGroupRating
                       value={formData.skillGrowth}
                       onChange={(value) => updateFormData("skillGrowth", value)}
-                      labels={["很少学习", "偶尔学习", "一般", "经常学习", "持续成长"]}
+                      labels={[
+                        t('dimensions.growth.skillGrowthLabels.0'),
+                        t('dimensions.growth.skillGrowthLabels.1'),
+                        t('dimensions.growth.skillGrowthLabels.2'),
+                        t('dimensions.growth.skillGrowthLabels.3'),
+                        t('dimensions.growth.skillGrowthLabels.4')
+                      ]}
                       color="purple"
                     />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">晋升空间</span>
+                      <span className="text-sm font-medium">{t('dimensions.growth.promotionChance')}</span>
                       <span className="text-xs text-muted-foreground">(1-5分)</span>
                     </div>
                     <ButtonGroupRating
                       value={formData.promotionChance}
                       onChange={(value) => updateFormData("promotionChance", value)}
-                      labels={["几乎没机会", "机会很小", "中等机会", "机会较多", "机会很多"]}
+                      labels={[
+                        t('dimensions.growth.promotionChanceLabels.0'),
+                        t('dimensions.growth.promotionChanceLabels.1'),
+                        t('dimensions.growth.promotionChanceLabels.2'),
+                        t('dimensions.growth.promotionChanceLabels.3'),
+                        t('dimensions.growth.promotionChanceLabels.4')
+                      ]}
                       color="purple"
                     />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">行业前景</span>
+                      <span className="text-sm font-medium">{t('dimensions.growth.industryProspect')}</span>
                       <span className="text-xs text-muted-foreground">(1-5分)</span>
                     </div>
                     <ButtonGroupRating
                       value={formData.industryProspect}
                       onChange={(value) => updateFormData("industryProspect", value)}
-                      labels={["前景堪忧", "不太乐观", "一般", "比较光明", "前景光明"]}
+                      labels={[
+                        t('dimensions.growth.industryProspectLabels.0'),
+                        t('dimensions.growth.industryProspectLabels.1'),
+                        t('dimensions.growth.industryProspectLabels.2'),
+                        t('dimensions.growth.industryProspectLabels.3'),
+                        t('dimensions.growth.industryProspectLabels.4')
+                      ]}
                       color="purple"
                     />
                   </div>
@@ -697,82 +735,120 @@ export default function CalculatorPage() {
               </CollapsibleCard>
 
               <CollapsibleCard
-                title="😊 工作体验"
+                title={t('dimensions.experience.title')}
                 icon={<Smile className="h-5 w-5 text-yellow-600" />}
                 score={dimensionScores.experience}
                 color="yellow"
+                scoreText={t('card.score')}
               >
                 <div className="space-y-6">
                   <div>
                     <EmotionRating
                       value={formData.workPressure}
                       onChange={(value) => updateFormData("workPressure", value)}
-                      labels={["压力很小", "压力较小", "压力适中", "压力较大", "压力很大"]}
+                      labels={[
+                        t('dimensions.experience.workPressureLabels.0'),
+                        t('dimensions.experience.workPressureLabels.1'),
+                        t('dimensions.experience.workPressureLabels.2'),
+                        t('dimensions.experience.workPressureLabels.3'),
+                        t('dimensions.experience.workPressureLabels.4')
+                      ]}
                       icons={["😊", "🙂", "😐", "😟", "😰"]}
                     />
-                    <p className="text-xs text-muted-foreground mt-2 text-center">工作压力</p>
+                    <p className="text-xs text-muted-foreground mt-2 text-center">{t('dimensions.experience.workPressure')}</p>
                   </div>
                   <div>
                     <EmotionRating
                       value={formData.teamAtmosphere}
                       onChange={(value) => updateFormData("teamAtmosphere", value)}
-                      labels={["氛围较差", "不太好", "一般", "比较好", "氛围很好"]}
+                      labels={[
+                        t('dimensions.experience.teamAtmosphereLabels.0'),
+                        t('dimensions.experience.teamAtmosphereLabels.1'),
+                        t('dimensions.experience.teamAtmosphereLabels.2'),
+                        t('dimensions.experience.teamAtmosphereLabels.3'),
+                        t('dimensions.experience.teamAtmosphereLabels.4')
+                      ]}
                       icons={["😡", "😟", "😐", "😊", "😄"]}
                     />
-                    <p className="text-xs text-muted-foreground mt-2 text-center">团队氛围</p>
+                    <p className="text-xs text-muted-foreground mt-2 text-center">{t('dimensions.experience.teamAtmosphere')}</p>
                   </div>
                   <div>
                     <EmotionRating
                       value={formData.workInterest}
                       onChange={(value) => updateFormData("workInterest", value)}
-                      labels={["不感兴趣", "不太喜欢", "一般", "比较喜欢", "非常喜欢"]}
+                      labels={[
+                        t('dimensions.experience.workInterestLabels.0'),
+                        t('dimensions.experience.workInterestLabels.1'),
+                        t('dimensions.experience.workInterestLabels.2'),
+                        t('dimensions.experience.workInterestLabels.3'),
+                        t('dimensions.experience.workInterestLabels.4')
+                      ]}
                       icons={["😴", "😐", "🤔", "😊", "🤩"]}
                     />
-                    <p className="text-xs text-muted-foreground mt-2 text-center">工作兴趣度</p>
+                    <p className="text-xs text-muted-foreground mt-2 text-center">{t('dimensions.experience.workInterest')}</p>
                   </div>
                 </div>
               </CollapsibleCard>
 
               <CollapsibleCard
-                title="⚖️ 生活平衡"
+                title={t('dimensions.balance.title')}
                 icon={<Heart className="h-5 w-5 text-red-600" />}
                 score={dimensionScores.balance}
                 color="red"
+                scoreText={t('card.score')}
               >
                 <div className="space-y-6">
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">工作灵活度</span>
+                      <span className="text-sm font-medium">{t('dimensions.balance.workFlexibility')}</span>
                       <span className="text-xs text-muted-foreground">(1-5分)</span>
                     </div>
                     <ButtonGroupRating
                       value={formData.workFlexibility}
                       onChange={(value) => updateFormData("workFlexibility", value)}
-                      labels={["很不灵活", "不太灵活", "一般", "比较灵活", "非常灵活"]}
+                      labels={[
+                        t('dimensions.balance.workFlexibilityLabels.0'),
+                        t('dimensions.balance.workFlexibilityLabels.1'),
+                        t('dimensions.balance.workFlexibilityLabels.2'),
+                        t('dimensions.balance.workFlexibilityLabels.3'),
+                        t('dimensions.balance.workFlexibilityLabels.4')
+                      ]}
                       color="red"
                     />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">假期福利</span>
+                      <span className="text-sm font-medium">{t('dimensions.balance.vacationBenefit')}</span>
                       <span className="text-xs text-muted-foreground">(1-5分)</span>
                     </div>
                     <ButtonGroupRating
                       value={formData.vacationBenefit}
                       onChange={(value) => updateFormData("vacationBenefit", value)}
-                      labels={["假期很少", "较少", "一般", "比较多", "假期充足"]}
+                      labels={[
+                        t('dimensions.balance.vacationBenefitLabels.0'),
+                        t('dimensions.balance.vacationBenefitLabels.1'),
+                        t('dimensions.balance.vacationBenefitLabels.2'),
+                        t('dimensions.balance.vacationBenefitLabels.3'),
+                        t('dimensions.balance.vacationBenefitLabels.4')
+                      ]}
                       color="red"
                     />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">工作生活平衡</span>
+                      <span className="text-sm font-medium">{t('dimensions.balance.workLifeBalance')}</span>
                       <span className="text-xs text-muted-foreground">(1-5分)</span>
                     </div>
                     <ButtonGroupRating
                       value={formData.workLifeBalance}
                       onChange={(value) => updateFormData("workLifeBalance", value)}
-                      labels={["严重失衡", "比较失衡", "一般", "比较平衡", "平衡良好"]}
+                      labels={[
+                        t('dimensions.balance.workLifeBalanceLabels.0'),
+                        t('dimensions.balance.workLifeBalanceLabels.1'),
+                        t('dimensions.balance.workLifeBalanceLabels.2'),
+                        t('dimensions.balance.workLifeBalanceLabels.3'),
+                        t('dimensions.balance.workLifeBalanceLabels.4')
+                      ]}
                       color="red"
                     />
                   </div>
@@ -785,7 +861,7 @@ export default function CalculatorPage() {
                   className="flex-1 text-lg py-6"
                   disabled={dimensionScores.total === 0}
                 >
-                  生成完整报告
+                  {t('generateReport')}
                 </Button>
               </div>
             </div>
