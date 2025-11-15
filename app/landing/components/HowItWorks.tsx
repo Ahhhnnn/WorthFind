@@ -45,7 +45,7 @@ export function HowItWorks() {
       </div>
       <div className="text-center mt-12">
         <Button size="lg" asChild>
-          <Link href="#calculator">立即体验</Link>
+          <Link href="/calculator">立即体验</Link>
         </Button>
       </div>
     </section>

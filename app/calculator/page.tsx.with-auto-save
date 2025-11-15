@@ -11,7 +11,6 @@ import { ScoreDashboard } from "@/components/ScoreDashboard";
 import { EmotionRating } from "@/components/EmotionRating";
 import { ButtonGroupRating } from "@/components/ButtonGroupRating";
 import { cn } from "@/lib/utils";
-import confetti from "canvas-confetti";
 
 interface FormData {
   monthlySalary: number;
@@ -174,77 +173,6 @@ export default function CalculatorPage() {
       recommendations.push("性价比较低，强烈建议重新评估职业选择，寻求更好的机会");
     }
 
-    // 礼花特效，只在60分以上时显示
-    if (scores.total >= 60) {
-      // 立即触发中心爆发
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ff9800', '#ff5722']
-      });
-
-      // 连续从顶部落下礼花
-      const duration = 3000;
-      const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-      const interval = setInterval(function() {
-        const timeLeft = animationEnd - Date.now();
-
-        if (timeLeft <= 0) {
-          return clearInterval(interval);
-        }
-
-        const particleCount = 50 * (timeLeft / duration);
-
-        // 左侧礼花
-        confetti({
-          ...defaults,
-          particleCount,
-          origin: { x: Math.random() * 0.3, y: Math.random() - 0.2 },
-          colors: ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5']
-        });
-
-        // 右侧礼花
-        confetti({
-          ...defaults,
-          particleCount,
-          origin: { x: 0.7 + Math.random() * 0.3, y: Math.random() - 0.2 },
-          colors: ['#2196f3', '#00bcd4', '#009688', '#4caf50', '#8bc34a']
-        });
-      }, 250);
-    }
-
-    // 触发庆祝动画
-    if (scores.total >= 80) {
-      setTimeout(() => {
-        confetti({
-          particleCount: 150,
-          spread: 100,
-          origin: { y: 0.5 },
-          colors: ['#ffd700', '#ffed4e', '#ffeb3b', '#ffc107', '#ff9800']
-        });
-      }, 500);
-    }
-
-    if (scores.total >= 90) {
-      setTimeout(() => {
-        confetti({
-          particleCount: 200,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 }
-        });
-        confetti({
-          particleCount: 200,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 }
-        });
-      }, 1000);
-    }
-
     let level = "";
     let color = "";
     let icon = Minus;
@@ -327,8 +255,6 @@ export default function CalculatorPage() {
   const handleSubmit = () => {
     const calculationResult = calculateScore();
     setResult(calculationResult);
-    // 滚动到页面顶部
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCapture = async () => {
@@ -650,13 +576,20 @@ export default function CalculatorPage() {
                     />
                   </div>
                   <div>
-                    <EmotionRating
+                    <label className="block text-sm font-medium mb-2">加班频率（1-5分，5分为经常加班）</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
                       value={formData.overtimeFrequency}
-                      onChange={(value) => updateFormData("overtimeFrequency", value)}
-                      labels={["几乎不", "很少", "有时", "经常", "总是"]}
-                      icons={["😊", "🙂", "😐", "😟", "😫"]}
+                      onChange={(e) => updateFormData("overtimeFrequency", Number(e.target.value))}
+                      className="w-full"
                     />
-                    <p className="text-xs text-muted-foreground mt-2 text-center">加班频率</p>
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>几乎不加班</span>
+                      <span className="font-medium text-primary">{formData.overtimeFrequency}</span>
+                      <span>经常加班</span>
+                    </div>
                   </div>
                 </div>
               </CollapsibleCard>
@@ -667,42 +600,54 @@ export default function CalculatorPage() {
                 score={dimensionScores.growth}
                 color="purple"
               >
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">技能提升机会</span>
-                      <span className="text-xs text-muted-foreground">(1-5分)</span>
-                    </div>
-                    <ButtonGroupRating
+                    <label className="block text-sm font-medium mb-2">技能提升机会（1-5分）</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
                       value={formData.skillGrowth}
-                      onChange={(value) => updateFormData("skillGrowth", value)}
-                      labels={["很少学习", "偶尔学习", "一般", "经常学习", "持续成长"]}
-                      color="purple"
+                      onChange={(e) => updateFormData("skillGrowth", Number(e.target.value))}
+                      className="w-full"
                     />
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>很少学习</span>
+                      <span className="font-medium text-primary">{formData.skillGrowth}</span>
+                      <span>持续成长</span>
+                    </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">晋升空间</span>
-                      <span className="text-xs text-muted-foreground">(1-5分)</span>
-                    </div>
-                    <ButtonGroupRating
+                    <label className="block text-sm font-medium mb-2">晋升空间（1-5分）</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
                       value={formData.promotionChance}
-                      onChange={(value) => updateFormData("promotionChance", value)}
-                      labels={["几乎没机会", "机会很小", "中等机会", "机会较多", "机会很多"]}
-                      color="purple"
+                      onChange={(e) => updateFormData("promotionChance", Number(e.target.value))}
+                      className="w-full"
                     />
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>很难晋升</span>
+                      <span className="font-medium text-primary">{formData.promotionChance}</span>
+                      <span>机会很多</span>
+                    </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">行业前景</span>
-                      <span className="text-xs text-muted-foreground">(1-5分)</span>
-                    </div>
-                    <ButtonGroupRating
+                    <label className="block text-sm font-medium mb-2">行业前景（1-5分）</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
                       value={formData.industryProspect}
-                      onChange={(value) => updateFormData("industryProspect", value)}
-                      labels={["前景堪忧", "不太乐观", "一般", "比较光明", "前景光明"]}
-                      color="purple"
+                      onChange={(e) => updateFormData("industryProspect", Number(e.target.value))}
+                      className="w-full"
                     />
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>前景堪忧</span>
+                      <span className="font-medium text-primary">{formData.industryProspect}</span>
+                      <span>前景光明</span>
+                    </div>
                   </div>
                 </div>
               </CollapsibleCard>
@@ -713,33 +658,54 @@ export default function CalculatorPage() {
                 score={dimensionScores.experience}
                 color="yellow"
               >
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <div>
-                    <EmotionRating
+                    <label className="block text-sm font-medium mb-2">工作压力（1-5分，5分为压力很大）</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
                       value={formData.workPressure}
-                      onChange={(value) => updateFormData("workPressure", value)}
-                      labels={["压力很小", "压力较小", "压力适中", "压力较大", "压力很大"]}
-                      icons={["😊", "🙂", "😐", "😟", "😰"]}
+                      onChange={(e) => updateFormData("workPressure", Number(e.target.value))}
+                      className="w-full"
                     />
-                    <p className="text-xs text-muted-foreground mt-2 text-center">工作压力</p>
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>压力很小</span>
+                      <span className="font-medium text-primary">{formData.workPressure}</span>
+                      <span>压力很大</span>
+                    </div>
                   </div>
                   <div>
-                    <EmotionRating
+                    <label className="block text-sm font-medium mb-2">团队氛围（1-5分）</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
                       value={formData.teamAtmosphere}
-                      onChange={(value) => updateFormData("teamAtmosphere", value)}
-                      labels={["氛围较差", "不太好", "一般", "比较好", "氛围很好"]}
-                      icons={["😡", "😟", "😐", "😊", "😄"]}
+                      onChange={(e) => updateFormData("teamAtmosphere", Number(e.target.value))}
+                      className="w-full"
                     />
-                    <p className="text-xs text-muted-foreground mt-2 text-center">团队氛围</p>
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>氛围较差</span>
+                      <span className="font-medium text-primary">{formData.teamAtmosphere}</span>
+                      <span>氛围很好</span>
+                    </div>
                   </div>
                   <div>
-                    <EmotionRating
+                    <label className="block text-sm font-medium mb-2">工作兴趣度（1-5分）</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
                       value={formData.workInterest}
-                      onChange={(value) => updateFormData("workInterest", value)}
-                      labels={["不感兴趣", "不太喜欢", "一般", "比较喜欢", "非常喜欢"]}
-                      icons={["😴", "😐", "🤔", "😊", "🤩"]}
+                      onChange={(e) => updateFormData("workInterest", Number(e.target.value))}
+                      className="w-full"
                     />
-                    <p className="text-xs text-muted-foreground mt-2 text-center">工作兴趣度</p>
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>不感兴趣</span>
+                      <span className="font-medium text-primary">{formData.workInterest}</span>
+                      <span>非常喜欢</span>
+                    </div>
                   </div>
                 </div>
               </CollapsibleCard>
@@ -750,42 +716,54 @@ export default function CalculatorPage() {
                 score={dimensionScores.balance}
                 color="red"
               >
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">工作灵活度</span>
-                      <span className="text-xs text-muted-foreground">(1-5分)</span>
-                    </div>
-                    <ButtonGroupRating
+                    <label className="block text-sm font-medium mb-2">工作灵活度（1-5分）</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
                       value={formData.workFlexibility}
-                      onChange={(value) => updateFormData("workFlexibility", value)}
-                      labels={["很不灵活", "不太灵活", "一般", "比较灵活", "非常灵活"]}
-                      color="red"
+                      onChange={(e) => updateFormData("workFlexibility", Number(e.target.value))}
+                      className="w-full"
                     />
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>很不灵活</span>
+                      <span className="font-medium text-primary">{formData.workFlexibility}</span>
+                      <span>非常灵活</span>
+                    </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">假期福利</span>
-                      <span className="text-xs text-muted-foreground">(1-5分)</span>
-                    </div>
-                    <ButtonGroupRating
+                    <label className="block text-sm font-medium mb-2">假期福利（1-5分）</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
                       value={formData.vacationBenefit}
-                      onChange={(value) => updateFormData("vacationBenefit", value)}
-                      labels={["假期很少", "较少", "一般", "比较多", "假期充足"]}
-                      color="red"
+                      onChange={(e) => updateFormData("vacationBenefit", Number(e.target.value))}
+                      className="w-full"
                     />
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>假期很少</span>
+                      <span className="font-medium text-primary">{formData.vacationBenefit}</span>
+                      <span>假期充足</span>
+                    </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-sm font-medium">工作生活平衡</span>
-                      <span className="text-xs text-muted-foreground">(1-5分)</span>
-                    </div>
-                    <ButtonGroupRating
+                    <label className="block text-sm font-medium mb-2">工作生活平衡（1-5分）</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
                       value={formData.workLifeBalance}
-                      onChange={(value) => updateFormData("workLifeBalance", value)}
-                      labels={["严重失衡", "比较失衡", "一般", "比较平衡", "平衡良好"]}
-                      color="red"
+                      onChange={(e) => updateFormData("workLifeBalance", Number(e.target.value))}
+                      className="w-full"
                     />
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>严重失衡</span>
+                      <span className="font-medium text-primary">{formData.workLifeBalance}</span>
+                      <span>平衡良好</span>
+                    </div>
                   </div>
                 </div>
               </CollapsibleCard>
