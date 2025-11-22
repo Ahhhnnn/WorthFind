@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import confetti from "canvas-confetti";
 import { motion } from "framer-motion";
 import html2canvas from "html2canvas";
-import { ArrowLeft, Camera, Check, Clock, DollarSign, TrendingUp as GrowthIcon, Heart, Info, LucideIcon, Minus, Smile, TrendingDown, TrendingUp } from "lucide-react";
-import { Link } from '@/i18n/routing';
+import { Camera, Check, Clock, DollarSign, TrendingUp as GrowthIcon, Heart, Info, LucideIcon, Minus, Smile, TrendingDown, TrendingUp } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslations } from 'next-intl';
 
@@ -527,13 +526,9 @@ export default function CalculatorPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="flex gap-4"
         >
-          <Button onClick={() => { setResult(null); }} className="flex-1">
+          <Button onClick={() => { setResult(null); }} className="w-full">
             {t('recalculate')}
-          </Button>
-          <Button variant="outline" asChild className="flex-1">
-            <Link href="/landing">{t('backToHome')}</Link>
           </Button>
         </motion.div>
       </div>
@@ -541,18 +536,8 @@ export default function CalculatorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <Button variant="ghost" asChild>
-            <Link href="/landing">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              {t('backToHome')}
-            </Link>
-          </Button>
-        </div>
-
-        <div className="max-w-4xl mx-auto">
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
           {!result ? (
             <div className="space-y-6">
               <div className="text-center mb-8">
@@ -870,7 +855,6 @@ export default function CalculatorPage() {
               {renderResult()}
             </div>
           )}
-        </div>
       </div>
     </div>
   );
